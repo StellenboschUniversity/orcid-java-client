@@ -87,5 +87,4 @@
     use 'mvn clean deploy' to push to maven repo -->
     
 	
-</build>
 </project>
