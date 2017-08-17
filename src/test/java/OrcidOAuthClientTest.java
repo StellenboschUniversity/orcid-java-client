@@ -23,27 +23,26 @@ import static org.junit.Assert.assertNotNull;
  */
 
 public class OrcidOAuthClientTest {
-	private Properties properties = new Properties();
+    private Properties properties = new Properties();
 
-	@Before
-	public void before() throws IOException {
-		final String filename = "testoauth.properties";
-		final InputStream inputStream = getClass().getResourceAsStream(filename);
+    @Before
+    public void before() throws IOException {
+            final String filename = "testoauth.properties";
+            final InputStream inputStream = getClass().getResourceAsStream(filename);
 
-		if (inputStream == null) {
-			throw new IOException("Unable to find properties file src/test/resources/" + filename);
-		}
+            if (inputStream == null) {
+                    throw new IOException("Unable to find properties file src/test/resources/" + filename);
+            }
 
-		properties.load(inputStream);
-	}
-	
-	@Test
-	public final void testCreateProfile() throws IOException, JAXBException {
-		OrcidOAuthClient client = new OrcidOAuthClient(properties.getProperty("orcidClientID"),
-				properties.getProperty("orcidClientSecret"), properties.getProperty("orcidReturnUri"),
-				(Boolean.valueOf(properties.getProperty("orcidSandbox")) ? OrcidApiType.SANDBOX : OrcidApiType.LIVE));
-		OrcidAccessToken tok = client.getCreateProfileAccessToken();
-		assertNotNull(tok.getAccess_token());
-	}
-	
+            properties.load(inputStream);
+    }
+
+    @Test
+    public final void testCreateProfile() throws IOException, JAXBException {
+            OrcidOAuthClient client = new OrcidOAuthClient(properties.getProperty("orcidClientID"),
+                            properties.getProperty("orcidClientSecret"), properties.getProperty("orcidReturnUri"),
+                            (Boolean.valueOf(properties.getProperty("orcidSandbox")) ? OrcidApiType.SANDBOX : OrcidApiType.LIVE));
+            OrcidAccessToken tok = client.getCreateProfileAccessToken();
+            assertNotNull(tok.getAccess_token());
+    }	
 }

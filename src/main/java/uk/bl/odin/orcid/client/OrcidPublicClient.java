@@ -4,9 +4,12 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import uk.bl.odin.orcid.client.constants.OrcidApiType;
 import uk.bl.odin.orcid.client.constants.OrcidConstants;
-import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidMessage;
-import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidProfile;
-import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidSearchResults;
+import org.orcid.jaxb.model.message.OrcidMessage;
+import org.orcid.jaxb.model.message.OrcidProfile;
+import org.orcid.jaxb.model.message.OrcidSearchResults;
+//import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidMessage;
+//import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidProfile;
+//import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidSearchResults;
 
 import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
