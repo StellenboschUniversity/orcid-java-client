@@ -111,7 +111,14 @@
             <artifactId>solr-solrj</artifactId>
             <version>6.6.0</version>
         </dependency>
+	<!-- https://mvnrepository.com/artifact/io.swagger/swagger-annotations -->
+<dependency>
+    <groupId>io.swagger</groupId>
+    <artifactId>swagger-annotations</artifactId>
+    <version>1.5.16</version>
+</dependency>
     </dependencies>
+
     
 
     <!-- the below will push the project to Github as a maven repository
