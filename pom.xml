@@ -105,12 +105,6 @@
             <version>2.5</version>
             <scope>provided</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.solr/solr-solrj -->
-        <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-solrj</artifactId>
-            <version>6.6.0</version>
-        </dependency>
 	<!-- https://mvnrepository.com/artifact/io.swagger/swagger-annotations -->
 <dependency>
     <groupId>io.swagger</groupId>
