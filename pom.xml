@@ -10,7 +10,7 @@
 	<properties>
 	    <!-- edition doesn't matter for compile -->
 		<restlet.edition>gae</restlet.edition>
-		<restlet.version>2.2-M6</restlet.version>
+		<restlet.version>2.3.12</restlet.version>
 		<github.global.server>github</github.global.server>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	 <maven.compiler.source>1.8</maven.compiler.source>
