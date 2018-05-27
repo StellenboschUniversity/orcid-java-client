@@ -6,7 +6,9 @@ import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.engine.header.Header;
+//import org.restlet.engine.header.Header;
+import org.restlet.data.ChallengeResponse;
+import org.restlet.data.ChallengeScheme;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
@@ -246,7 +248,7 @@ public class OrcidOAuthClient {
 	public OrcidProfile getProfile(OrcidAccessToken token) throws IOException, JAXBException {
 		Reference ref = new Reference(apiUriV12 + "/" + token.getOrcid() + READ_PROFILE_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
-		addRestletHeader(client, "Authorization", "Bearer " + token.getAccess_token());
+		addAuthorizationHeader(client, token.getAccess_token());
 		Representation representation = client.get();
 		OrcidMessage message =
 				(OrcidMessage) orcidMessageContext.createUnmarshaller().unmarshal(representation.getStream());
@@ -268,7 +270,7 @@ public class OrcidOAuthClient {
 	public OrcidBio getBio(OrcidAccessToken token) throws IOException, JAXBException {
 		Reference ref = new Reference(apiUriV12 + "/" + token.getOrcid() + READ_BIO_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
-		addRestletHeader(client, "Authorization", "Bearer " + token.getAccess_token());
+		addAuthorizationHeader(client, token.getAccess_token());
 		Representation representation = client.get();
 		OrcidMessage message =
 				(OrcidMessage) orcidMessageContext.createUnmarshaller().unmarshal(representation.getStream());
@@ -293,8 +295,7 @@ public class OrcidOAuthClient {
 	public void appendWork(OrcidAccessToken token, OrcidWork work) throws ResourceException, IOException {
 		Reference ref = new Reference(apiUriV12 + "/" + token.getOrcid() + WORK_CREATE_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
-		// OAUTH bearer is a pain via restlet ChallengeScheme on GAE
-		addRestletHeader(client, "Authorization", "Bearer " + token.getAccess_token());
+		addAuthorizationHeader(client, token.getAccess_token());
 		log.info(token.getAccess_token());
 		try {
 			StringWriter sw = new StringWriter();
@@ -384,11 +385,15 @@ public class OrcidOAuthClient {
 		return message;
 	}
 
+
 	/**
+	 * AS OF v2.3 of restlet, an addheader function is available
+	 * https://stackoverflow.com/a/9836229
+	 * 
 	 * Adds a HTTP header to a Restlet ClientResource OAUTH bearer is a pain via
 	 * restlet on GAE, so we set it ourselves.
 	 */
-	public static void addRestletHeader(ClientResource client, String key, String value) {
+	/*public static void addRestletHeader(ClientResource client, String key, String value) {
 		@SuppressWarnings("unchecked")
 		Series<Header> headers = (Series<Header>) client.getRequestAttributes().get("org.restlet.http.headers");
 		if (headers == null) {
@@ -396,6 +401,12 @@ public class OrcidOAuthClient {
 			client.getRequestAttributes().put("org.restlet.http.headers", headers);
 		}
 		headers.add(key, value);
-	}
+	}*/
 
+	public static void addAuthorizationHeader(ClientResource client, String token) {
+		ChallengeResponse cr = new ChallengeResponse(
+             ChallengeScheme.HTTP_OAUTH_BEARER);
+		cr.setRawValue(token);
+		client.setChallengeResponse(cr);
+	}
 }
