@@ -13,7 +13,6 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
-import org.restlet.util.Series;
 import uk.bl.odin.orcid.client.constants.OrcidApiType;
 import uk.bl.odin.orcid.client.constants.OrcidAuthScope;
 import uk.bl.odin.orcid.client.constants.OrcidConstants;
@@ -62,10 +61,12 @@ public class OrcidOAuthClient {
 	private static final String SANDBOX_LOGIN_URI = "https://sandbox.orcid.org";
 	private static final String SANDBOX_API_URI_TOKEN = "https://api.sandbox.orcid.org";
 	private static final String SANDBOX_API_URI_V1_2 = "http://api.sandbox.orcid.org/v1.2";
+	private static final String SANDBOX_API_URI_V2_0 = "http://api.sandbox.orcid.org/v2.0";
 	
 	private static final String LIVE_LOGIN_URI = "https://orcid.org";
 	private static final String LIVE_API_URI_TOKEN = "https://api.orcid.org";
 	private static final String LIVE_API_URI_V1_2 = "http://api.orcid.org/v1.2";
+	private static final String LIVE_API_URI_V2_0 = "http://api.orcid.org/v2.0";
 
 	private final String clientID;
 	private final String clientSecret;
@@ -73,7 +74,7 @@ public class OrcidOAuthClient {
 
 	private final String loginUri;
 	private final String apiUriToken;
-	private final String apiUriV12;
+	private final String apiUriBase;
 
 	private final JAXBContext orcidMessageContext;
 
@@ -122,11 +123,11 @@ public class OrcidOAuthClient {
 		if (orcidApiType == OrcidApiType.SANDBOX) {
 			this.loginUri = SANDBOX_LOGIN_URI;
 			this.apiUriToken = SANDBOX_API_URI_TOKEN;
-			this.apiUriV12 = SANDBOX_API_URI_V1_2;
+			this.apiUriBase = SANDBOX_API_URI_V2_0;
 		} else {
 			this.loginUri = LIVE_LOGIN_URI;
 			this.apiUriToken = LIVE_API_URI_TOKEN;
-			this.apiUriV12 = LIVE_API_URI_V1_2;
+			this.apiUriBase = LIVE_API_URI_V2_0;
 		}
 		this.clientID = clientID;
 		this.clientSecret = clientSecret;
@@ -246,7 +247,7 @@ public class OrcidOAuthClient {
 	 * @throws JAXBException
 	 */
 	public OrcidProfile getProfile(OrcidAccessToken token) throws IOException, JAXBException {
-		Reference ref = new Reference(apiUriV12 + "/" + token.getOrcid() + READ_PROFILE_ENDPOINT);
+		Reference ref = new Reference(apiUriBase + "/" + token.getOrcid() + READ_PROFILE_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		addAuthorizationHeader(client, token.getAccess_token());
 		Representation representation = client.get();
@@ -268,7 +269,7 @@ public class OrcidOAuthClient {
 	 * @throws JAXBException
 	 */
 	public OrcidBio getBio(OrcidAccessToken token) throws IOException, JAXBException {
-		Reference ref = new Reference(apiUriV12 + "/" + token.getOrcid() + READ_BIO_ENDPOINT);
+		Reference ref = new Reference(apiUriBase + "/" + token.getOrcid() + READ_BIO_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		addAuthorizationHeader(client, token.getAccess_token());
 		Representation representation = client.get();
@@ -293,7 +294,7 @@ public class OrcidOAuthClient {
 	 *             if there's a http problem (e.g. 404, 400)
 	 */
 	public void appendWork(OrcidAccessToken token, OrcidWork work) throws ResourceException, IOException {
-		Reference ref = new Reference(apiUriV12 + "/" + token.getOrcid() + WORK_CREATE_ENDPOINT);
+		Reference ref = new Reference(apiUriBase + "/" + token.getOrcid() + WORK_CREATE_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		addAuthorizationHeader(client, token.getAccess_token());
 		log.info(token.getAccess_token());

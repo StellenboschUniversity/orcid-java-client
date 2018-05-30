@@ -30,7 +30,9 @@ public class OrcidPublicClient {
 	private static final Logger log = Logger.getLogger(OrcidPublicClient.class.getName());
 
 	private static final String LIVE_PUBLIC_URI_V12 = "http://pub.orcid.org/v1.2";
+	private static final String LIVE_PUBLIC_URI_V20 = "http://pub.orcid.org/v2.0";
 	private static final String SANDBOX_PUBLIC_URI_V12 = "http://pub.sandbox.orcid.org/v1.2";
+	private static final String SANDBOX_PUBLIC_URI_V20 = "http://pub.sandbox.orcid.org/v2.0";
 	private static final String SEARCH_ENDPOINT = "/search/orcid-bio/";
 
 	private static final String TYPE_ORCID_BIO = "orcid-bio";
@@ -38,7 +40,7 @@ public class OrcidPublicClient {
 
 	private final JAXBContext orcidMessageContext;
 
-	private final String apiUriV12;
+	private final String apiUriBase;
 
 	@Inject
 	public OrcidPublicClient() throws JAXBException {
@@ -57,10 +59,10 @@ public class OrcidPublicClient {
 		orcidMessageContext = JAXBContext.newInstance(OrcidMessage.class);
 
 		if (apiType == OrcidApiType.SANDBOX) {
-			apiUriV12 = SANDBOX_PUBLIC_URI_V12;
+			apiUriBase = SANDBOX_PUBLIC_URI_V20;
 		}
 		else if (apiType == OrcidApiType.LIVE) {
-			apiUriV12 = LIVE_PUBLIC_URI_V12;
+			apiUriBase = LIVE_PUBLIC_URI_V20;
 		}
 		else {
 			throw new IllegalArgumentException("Unknown API type '" + apiType.name() + "'");
@@ -89,7 +91,7 @@ public class OrcidPublicClient {
 		if (query == null || query.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
-		ClientResource res = new ClientResource(apiUriV12 + SEARCH_ENDPOINT);
+		ClientResource res = new ClientResource(apiUriBase + SEARCH_ENDPOINT);
 		res.accept(OrcidConstants.APPLICATION_ORCID_XML);
 		res.addQueryParameter("q", query);
 		if (pagesize >= 0) {
@@ -132,7 +134,7 @@ public class OrcidPublicClient {
 		if (profileType == null) {
 			throw new IllegalArgumentException();
 		}
-		ClientResource res = new ClientResource(apiUriV12 + "/" + orcid + "/" + profileType);
+		ClientResource res = new ClientResource(apiUriBase + "/" + orcid + "/" + profileType);
 		res.accept(OrcidConstants.APPLICATION_ORCID_XML);
 		try {
 			Unmarshaller um = orcidMessageContext.createUnmarshaller();
